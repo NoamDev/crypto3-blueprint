@@ -28,7 +28,7 @@
 #ifndef CRYPTO3_ZK_SHA256_COMPONENT_HPP
 #define CRYPTO3_ZK_SHA256_COMPONENT_HPP
 
-#include <nil/crypto3/zk/snark/merkle_tree.hpp>
+#include <nil/crypto3/zk/merkle_tree.hpp>
 #include <nil/crypto3/zk/components/basic_components.hpp>
 #include <nil/crypto3/zk/components/hashes/hash_io.hpp>
 #include <nil/crypto3/zk/components/hashes/sha256/sha256_construction.hpp>
@@ -196,6 +196,7 @@ namespace nil {
                 class sha256_two_to_one_hash_component : public component<FieldType> {
                 public:
                     typedef std::vector<bool> hash_value_type;
+                    typedef digest_variable<FieldType> hash_variable_type;
                     typedef snark::merkle_authentication_path merkle_authentication_path_type;
 
                     std::shared_ptr<sha256_compression_function_component<FieldType>> f;
@@ -272,6 +273,7 @@ namespace nil {
                 class sha256_hash_component: component<FieldType> {
                 public:
                     typedef std::vector<bool> hash_value_type;
+                    typedef digest_variable<FieldType> hash_variable_type;
                     typedef snark::merkle_authentication_path merkle_authentication_path_type;
 
                     std::vector<std::shared_ptr<sha256_compression_function_component<FieldType>>> blocks_components;
@@ -343,6 +345,10 @@ namespace nil {
                             for(auto f: blocks_components) {
                                 f->generate_r1cs_witness();
                             }
+                        }
+
+                        static std::size_t get_block_len() {
+                            return hashes::sha2<256>::block_bits;
                         }
 
                         static std::size_t get_digest_len() {

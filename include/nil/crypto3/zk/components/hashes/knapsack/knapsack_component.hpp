@@ -65,7 +65,7 @@
 
 #include <nil/crypto3/random/hash.hpp>
 
-#include <nil/crypto3/zk/snark/merkle_tree.hpp>
+#include <nil/crypto3/zk/merkle_tree.hpp>
 #include <nil/crypto3/zk/components/basic_components.hpp>
 #include <nil/crypto3/zk/components/hashes/hash_io.hpp>
 
@@ -91,6 +91,8 @@ namespace nil {
                     static std::size_t num_cached_coefficients;
 
                 public:
+                    typedef std::vector<typename FieldType::value_type> hash_value_type;
+                    typedef blueprint_linear_combination_vector<FieldType> hash_variable_type;
                     std::size_t input_len;
                     std::size_t dimension;
 
@@ -195,6 +197,7 @@ namespace nil {
                 class knapsack_crh_with_bit_out_component : public component<FieldType> {
                 public:
                     typedef std::vector<bool> hash_value_type;
+                    typedef digest_variable<FieldType> hash_variable_type;
                     typedef snark::merkle_authentication_path merkle_authentication_path_type;
 
                     std::size_t input_len;
